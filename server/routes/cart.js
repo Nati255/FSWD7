@@ -1,3 +1,4 @@
+// routes/cart.js
 import express from 'express';
 import {
   getCartByUserId,
@@ -11,56 +12,49 @@ import { authorizeSelfOrAdmin } from '../middleware/authorizeSelfOrAdmin.js';
 
 const router = express.Router();
 
-// Get cart for a user
 router.get('/:userId', authenticate, authorizeSelfOrAdmin(), async (req, res, next) => {
   try {
     const cart = await getCartByUserId(req.params.userId);
-    res.json(cart);
+    res.json(cart); // { items, total }
   } catch (err) {
     next(err);
   }
 });
 
-// Add product to cart
-router.post('/',authenticate, authorizeSelfOrAdmin('userId'), async (req, res, next) => {
+router.post('/',authenticate, async (req, res, next) => {
   try {
-    const { userId, productId, amount } = req.body;
+    const userId = req.user.id;           // ← מתוך ה-JWT
+    const { productId, amount } = req.body;
     const cart = await addToCart(userId, productId, amount);
     res.status(201).json(cart);
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 });
 
-// Update amount for a product in cart
-router.put('/',authenticate, authorizeSelfOrAdmin('userId'), async (req, res, next) => {
-  try {
-    const { userId, productId, amount } = req.body;
+router.put('/', authenticate,  async (req, res, next) => {
+ try {
+    const userId = req.user.id;
+    const { productId, amount } = req.body;
     const cart = await updateCartItem(userId, productId, amount);
     res.json(cart);
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 });
 
-// Remove a product from cart
 router.delete('/:userId/:productId', authenticate, authorizeSelfOrAdmin(), async (req, res, next) => {
   try {
-    const result = await removeCartItem(req.params.userId, req.params.productId);
-    res.json(result);
-  } catch (err) {
-    next(err);
-  }
+    const userId = req.user.id; // ← מתעלם מה-:userId בנתיב
+    const { productId } = req.params;
+    const cart = await removeCartItem(userId, productId);
+    res.json(cart);
+  } catch (err) { next(err); }
 });
 
-// Clear entire cart
+// מנקה סל
 router.delete('/:userId', authenticate, authorizeSelfOrAdmin(), async (req, res, next) => {
   try {
-    const result = await clearCart(req.params.userId);
-    res.json(result);
-  } catch (err) {
-    next(err);
-  }
+    const userId = req.user.id; // ← מתעלם מה-:userId בנתיב
+    const cart = await clearCart(userId);
+    res.json(cart);
+  } catch (err) { next(err); }
 });
 
 export default router;

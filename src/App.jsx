@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import LoginPage from './auth/LoginPage';
+import RegisterPage from './auth/RegisterPage';
+import AdminDashboard from './admin/pages/AdminDashboard';
+import CustomerHome from './customer/pages/CustomerHome';
+import AdminProducts from './admin/components/AdminProducts';
+import AdminOrders from './admin/pages/AdminOrders';
+import { CartProvider } from "./customer/context/CartContext";
 function App() {
-  const [count, setCount] = useState(0)
+  const token = localStorage.getItem('token');
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/admin"
+          element={
+            token ? <AdminDashboard /> : <Navigate to="/login" replace />
+          }
+        />
+        
+        <Route
+        path="/customer"
+        element={
+          token ? (
+            <CartProvider>
+              <CustomerHome />
+            </CartProvider>
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }/>
+        <Route path="/admin/products" element={<AdminProducts />} /> 
+        <Route path="/admin/orders" element={<AdminOrders />} /> 
+        <Route path="*" element={<Navigate to="/login" />} />
+        
+      </Routes>
+    
+  );
 }
 
-export default App
+export default App;

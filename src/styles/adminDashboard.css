@@ -1,0 +1,79 @@
+.admin-content { padding: 2rem; }
+.admin-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+.admin-title { display: flex; align-items: center; gap: .6rem; font-size: 1.6rem; letter-spacing: var(--mainSpacing); }
+.admin-actions { display: flex; align-items: center; gap: .6rem; }
+
+.btn {
+  padding: .6rem 1rem;
+  border: 1px solid var(--primaryColor);
+  border-radius: 10px;
+  background: var(--primaryColor);
+  color: var(--mainBlack);
+  letter-spacing: var(--mainSpacing);
+  cursor: pointer;
+  transition: var(--mainTransition);
+}
+.btn:hover { background: transparent; color: var(--primaryColor); }
+
+/* Cards */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.05);
+  overflow: hidden;
+}
+.card-header {
+  padding: .9rem 1rem;
+  border-bottom: 1px solid #eee;
+  letter-spacing: var(--mainSpacing);
+}
+
+.kpi { padding: 1rem; }
+.kpi-label { opacity: .8; margin-bottom: .35rem; }
+.kpi-value { font-size: 2rem; font-weight: 800; line-height: 1.1; }
+.kpi-sub { opacity: .6; font-size: .9rem; }
+
+/* Top sellers list */
+.top-list { padding: .5rem; }
+.top-row {
+  display: grid;
+  grid-template-columns: 54px 1fr 120px 140px;
+  align-items: center;
+  gap: .5rem;
+  padding: .6rem .5rem;
+  border-bottom: 1px solid #f4f4f4;
+}
+.top-row:last-child { border-bottom: 0; }
+.rank {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: var(--mainGrey);
+  display: grid; place-items: center; font-weight: 700;
+}
+.title { font-weight: 700; }
+.qty { opacity: .8; }
+.rev { text-align: right; font-weight: 700; }
+
+.t-center { text-align: center; }
+.p1 { padding: 1rem; }
+
+/* Empty state */
+.empty-state { padding: 1.5rem; text-align: center; color: #777; }
+.empty-state i {
+  font-size: 2rem; display: block; margin-bottom: .5rem; color: var(--primaryColor);
+}
+
+/* Responsive */
+@media (max-width: 920px) {
+  .admin-wrapper { grid-template-columns: 180px 1fr; }
+  .top-row { grid-template-columns: 38px 1fr 90px 100px; }
+}

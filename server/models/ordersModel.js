@@ -82,3 +82,42 @@ export async function getAllOrders() {
   `);
   return rows;
 }
+export async function updateOrderStatus(orderId, nextStatus) {
+  // ולידציה בסיסית לסטטוס (תואם לטבלת orders)
+  const valid = ['pending', 'paid', 'shipped', 'cancelled'];
+  if (!valid.includes(nextStatus)) throw new Error('Invalid status');
+
+  const [result] = await db.query(
+    'UPDATE orders SET status = ? WHERE id = ?',
+    [nextStatus, orderId]
+  );
+  return result.affectedRows === 1;
+}
+
+export async function getAllOrdersWithAgg({ status, q }) {
+  // חיפוש לפי מייל/שם + פילטר סטטוס (לבחירה)
+  const params = [];
+  let where = 'WHERE 1=1';
+  if (status) {
+    where += ' AND o.status = ?';
+    params.push(status);
+  }
+  if (q) {
+    where += ' AND (u.full_name LIKE ? OR u.email LIKE ?)';
+    params.push(`%${q}%`, `%${q}%`);
+  }
+
+  const [rows] = await db.query(`
+    SELECT 
+      o.*, 
+      u.full_name, 
+      u.email,
+      (SELECT SUM(oi.amount) FROM order_items oi WHERE oi.order_id = o.id) AS items_count
+    FROM orders o
+    JOIN users u ON o.user_id = u.id
+    ${where}
+    ORDER BY o.created_at DESC
+  `, params);
+
+  return rows;
+}

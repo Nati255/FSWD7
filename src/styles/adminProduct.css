@@ -1,0 +1,232 @@
+/* ===== Admin Layout ===== */
+.admin-wrapper {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  min-height: 100vh;
+  background: var(--mainWhite);
+}
+
+.admin-content {
+  padding: 2rem;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.admin-title {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  font-size: 1.6rem;
+  letter-spacing: var(--mainSpacing);
+}
+
+.admin-actions {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.admin-search {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--mainGrey);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: .5rem .75rem;
+}
+.admin-search input {
+  border: none;
+  background: transparent;
+  outline: none;
+  min-width: 260px;
+}
+
+/* ===== Buttons ===== */
+.btn-primary,
+.btn-ghost,
+.btn-danger,
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem .9rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: var(--mainSpacing);
+  transition: var(--mainTransition);
+}
+.btn-primary {
+  background: var(--primaryColor);
+  border-color: var(--primaryColor);
+  color: var(--mainBlack);
+}
+.btn-primary:hover { filter: brightness(0.95); }
+
+.btn-ghost {
+  background: transparent;
+  border-color: #ddd;
+}
+.btn-ghost:hover { border-color: var(--primaryColor); color: var(--primaryColor); }
+
+.btn-danger {
+  background: #ffebe8;
+  border-color: #ffc9c1;
+  color: #b00020;
+}
+.btn-danger:hover { filter: brightness(0.97); }
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  padding: .25rem;
+}
+
+/* ===== Cards ===== */
+.admin-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: 0 6px 22px rgba(0,0,0,.04);
+}
+
+/* ===== Table ===== */
+.table-wrap { overflow: auto; }
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  min-width: 980px;
+}
+.admin-table thead th {
+  position: sticky;
+  top: 0;
+  background: #fafafa;
+  text-align: left;
+  padding: .9rem .75rem;
+  border-bottom: 2px solid var(--mainGrey);
+  text-transform: uppercase;
+  letter-spacing: var(--mainSpacing);
+  font-size: .85rem;
+}
+.admin-table td {
+  padding: .8rem .75rem;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+.admin-table tbody tr:hover { background: #fff9f5; }
+.admin-table tbody tr.editing { background: #fff3e9; }
+
+.admin-table .num { text-align: right; }
+.admin-table .actions { width: 220px; }
+.empty-cell { text-align: center; padding: 2rem; color: #888; }
+
+.cell-strong { font-weight: 700; }
+
+.admin-prod-thumb {
+  width: 64px; height: 64px; object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  background: #fff;
+}
+
+.img-edit { display: flex; align-items: center; gap: .75rem; }
+
+/* ===== Modal ===== */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.35);
+  display: grid; place-items: center; z-index: 50;
+}
+.modal {
+  width: min(820px, 92vw);
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eee;
+  box-shadow: 0 20px 50px rgba(0,0,0,.2);
+  overflow: hidden;
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #eee;
+  background: #fafafa;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .9rem 1rem;
+  padding: 1rem 1.25rem;
+}
+.form-grid label {
+  display: grid;
+  gap: .35rem;
+  font-size: .9rem;
+}
+.form-grid label span { color: #555; }
+.form-grid input, .form-grid textarea {
+  padding: .6rem .7rem;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: var(--mainTransition);
+  font-family: inherit;
+}
+.form-grid input:focus, .form-grid textarea:focus { border-color: var(--primaryColor); }
+.form-grid .full { grid-column: 1 / -1; }
+.modal-footer {
+  display: flex; justify-content: flex-end; gap: .5rem;
+  padding: .75rem 1.25rem 1.25rem;
+}
+
+/* ===== Misc ===== */
+.skeleton.skeleton-table {
+  height: 220px;
+  background: linear-gradient(90deg, #f2f2f2, #eaeaea, #f2f2f2);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: 14px;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.admin-alert.error {
+  background: #ffecec;
+  border: 1px solid #ffd0d0;
+  color: #b00020;
+  padding: .75rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.admin-table td.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem; 
+}
+
+/* === Row Card Border (מסגרת לכל רשומה) === */
+
+/* בטל את הקו התחתון הישן של כל תא */
+.admin-table td { border-bottom: none; }
+
+/* מסגרת רציפה סביב כל שורה: קו עליון/תחתון לכל התאים,
+   וקו שמאל/ימין רק לתא הראשון/האחרון */
+.admin-table tbody td {
+  background: #fff;                 /* שיהיה לבן ונקי */
+  border-radius: 12px 0 0 12px;
+}
+/* הובר עדין לכל השורה (רק מחליף צבע מסגרת/רקע) */
+.admin-table tbody tr:hover td {
+  border-color: #f0c9a3;            /* אפשר להחליף ל-var(--primaryColor) אם בא לך */
+  background: #fffaf6;
+}

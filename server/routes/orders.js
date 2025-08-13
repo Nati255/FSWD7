@@ -2,7 +2,9 @@ import express from 'express';
 import {
   getOrdersByUserId,
   getOrderDetails,
-  createOrderFromCart
+  createOrderFromCart,
+  updateOrderStatus,
+  getAllOrdersWithAgg
 } from '../models/ordersModel.js';
 import { isAdmin } from '../middleware/isAdmin.js';
 import { authenticate } from '../middleware/auth.js';
@@ -44,6 +46,30 @@ router.get('/:orderId', authenticate, async (req, res, next) => {
 router.get('/', authenticate, isAdmin, async (req, res, next) => {
   try {
     const orders = await getAllOrders();
+    res.json(orders);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.patch('/:orderId/status', authenticate, isAdmin, async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body; // 'pending' | 'paid' | 'shipped' | 'cancelled'
+    const ok = await updateOrderStatus(orderId, status);
+    if (!ok) return res.status(404).json({ error: 'Order not found' });
+    const fresh = await getOrderDetails(orderId);
+    res.json(fresh);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// 📄 כל ההזמנות עם פילטרים (admin) ?status=paid&q=gmail
+router.get('/', authenticate, isAdmin, async (req, res, next) => {
+  try {
+    const { status, q } = req.query;
+    const orders = await getAllOrdersWithAgg({ status, q });
     res.json(orders);
   } catch (err) {
     next(err);

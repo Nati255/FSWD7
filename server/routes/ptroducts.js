@@ -1,5 +1,3 @@
-import { authenticate } from '../middleware/auth.js';
-import { isAdmin } from '../middleware/isAdmin.js';
 import express from 'express';
 import {
   getAllProducts,
@@ -8,6 +6,8 @@ import {
   updateProduct,
   deleteProduct
 } from '../models/productsModel.js';
+import { authenticate } from '../middleware/auth.js';
+import { isAdmin } from '../middleware/isAdmin.js';
 
 const router = express.Router();
 

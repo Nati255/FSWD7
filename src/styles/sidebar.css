@@ -1,0 +1,121 @@
+/* ---------- Admin Layout ---------- */
+.admin-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+  background: var(--mainWhite);
+}
+h1{
+  text-align: center;
+}
+p{
+  text-align: center;
+}
+/* Sidebar */
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background: rgb(231, 226, 221); /* כמו ה-navbar שלך */
+  border-right: 1px solid var(--mainGrey);
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.sidebar-header .brand {
+  display: inline-block;
+  font-weight: 700;
+  letter-spacing: var(--mainSpacing);
+  text-transform: uppercase;
+  color: var(--mainBlack);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--mainBlack);
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.6rem;
+  transition: var(--mainTransition);
+  font-weight: 600;
+  letter-spacing: var(--mainSpacing);
+  text-transform: uppercase;
+}
+
+.sidebar-link:hover {
+  background: var(--mainGrey);
+  color: var(--primaryColor);
+}
+
+.sidebar-link.active {
+  background: var(--primaryColor);
+  color: var(--mainBlack);
+}
+
+.sidebar-icon {
+  width: 1.2rem;
+  text-align: center;
+}
+
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--primaryColor);
+  background: var(--primaryColor);
+  color: var(--mainBlack);
+  border-radius: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--mainSpacing);
+  cursor: pointer;
+  transition: var(--mainTransition);
+}
+
+.sidebar-logout:hover {
+  background: transparent;
+  color: var(--primaryColor);
+}
+
+.admin-content {
+  padding: 1.5rem;
+}
+
+.admin-welcome h1 {
+  font-size: 1.8rem;
+  letter-spacing: var(--mainSpacing);
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .admin-layout {
+    grid-template-columns: 88px 1fr;
+  }
+  .sidebar-link span,
+  .sidebar-logout span,
+  .sidebar-header .brand {
+    display: none;
+  }
+  .admin-sidebar {
+    align-items: center;
+  }
+  .sidebar-link,
+  .sidebar-logout {
+    justify-content: center;
+    width: 100%;
+  }
+}
