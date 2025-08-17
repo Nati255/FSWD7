@@ -1,14 +1,17 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from "../../auth/AuthContext";
 import '../../styles/sidebar.css'; 
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
-    navigate('/login', { replace: true });
+    logout();   
+    navigate("/customer", { replace: true });
   };
 
   return (

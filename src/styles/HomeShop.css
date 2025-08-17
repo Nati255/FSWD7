@@ -1,23 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
 
-:root {
-  --primaryColor: #f09d51;
-  --mainWhite: #fff;
-  --mainBlack: #222;
-  --mainGrey: #ececec;
-  --mainSpacing: 0.1rem;
-  --mainTransition: all 0.3s linear;
-}
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-body {
-  color: var(--mainBlack);
-  background: var(--mainWhite);
-  font-family: "Lato", sans-serif;
-}
 .navbar {
     position: sticky;
     top: 0;
@@ -109,10 +90,13 @@ body {
       position: fixed;
       top: 0;
       left: 0;
-      height: 100%;
-      width: 200px;
+      transform: none;      /* מאפס את translateX(-50%) של הדסקטופ */
+      height: 100vh;        /* מבטיח גובה מסך מלא במובייל */
+      overflow-y: auto;     /* מאפשר גלילה אם התפריט ארוך */
+
+      width: 240px;         /* אופציונלי: רוחב נוח יותר מתצוגת 200px */
       background: var(--mainWhite);
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
       padding-top: 3rem;
       z-index: 1000;
     }
@@ -179,6 +163,8 @@ body {
     border: 1px solid var(--primaryColor);
     transition: var(--mainTransition);
     cursor: pointer;
+    width: 240px;
+    
 }
 .banner-btn:hover {
     background: transparent;
@@ -354,4 +340,79 @@ body {
   }
   
   /* --------------- End of Cart ---------------- */
-  
+
+  /* Footer */
+.site-footer {
+  background: var(--primaryColor);
+  color: var(--mainWhite);
+  padding: 2rem 0 0;
+  margin-top: 4rem;
+  text-align: center; /* הכל במרכז */
+}
+
+.footer-container {
+  max-width: 1170px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  padding: 0 1.5rem;
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: var(--mainSpacing);
+}
+
+.footer-section p,
+.footer-section a {
+  font-size: 0.9rem;
+  color: var(--mainWhite);
+  text-decoration: none;
+}
+
+.footer-section a:hover {
+  color: var(--mainBlack);
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.5rem;
+}
+
+.social-icons {
+  margin-top: 1rem;
+}
+
+.social-icons a {
+  display: inline-block;
+  margin: 0 0.5rem;
+  font-size: 1.2rem;
+  color: var(--mainWhite);
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #ffe0c2; /* כתום בהיר בהובר */
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  background: rgba(0, 0, 0, 0.15);
+  font-size: 0.85rem;
+}

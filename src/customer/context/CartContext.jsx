@@ -1,6 +1,6 @@
 // src/customer/context/CartContext.jsx
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-
+import { useAuth } from "../../auth/AuthContext";
 const CartCtx = createContext(null);
 const API = import.meta.env?.VITE_API_BASE || "http://localhost:3001";
 
@@ -16,9 +16,7 @@ function getUserIdFromToken() {
 }
 
 export function CartProvider({ children }) {
-  const token = localStorage.getItem("token") || "";
-  const userId = getUserIdFromToken();
-
+  const { token, userId } = useAuth();
   // אל תשלח Authorization: undefined
   const headers = useMemo(() => {
     const h = { "Content-Type": "application/json" };

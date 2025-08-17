@@ -13,7 +13,10 @@ connection.connect((err) => {
 
   const queries = [
     { table: 'users', sql: 'SELECT * FROM users LIMIT 5' },
-    { table: 'products', sql: 'SELECT * FROM products' }
+    { table: 'products', sql: 'SELECT * FROM products' },
+    { table: 'orders', sql: 'SELECT * FROM orders' },
+    { table: 'order_items', sql: 'SELECT * FROM order_items' },
+    { table: 'cart_items', sql: 'SELECT * FROM cart_items' },
   ];
 
   let completed = 0;

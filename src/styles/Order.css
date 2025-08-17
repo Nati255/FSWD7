@@ -1,0 +1,160 @@
+/* ===== Checkout & Orders (match store look) ===== */
+.checkout-section, .orders-section { padding-top: 2rem; min-height: 60vh; }
+
+.checkout-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+  align-items: start;
+}
+.card {
+  background: var(--mainWhite);
+  box-shadow: var(--lightShadow);
+  border-radius: 4px;
+  padding: 1rem;
+}
+.card-title {
+  text-transform: uppercase;
+  letter-spacing: var(--mainSpacing);
+  margin-bottom: .75rem;
+}
+
+.form-grid { display: grid; gap: .6rem; }
+.form-control {
+  border: 1px solid #ddd; padding: .6rem .8rem; font-size: 1rem;
+  background: #fff; color: var(--mainBlack);
+}
+.form-control:focus { outline: none; border-color: var(--primaryColor); }
+.form-actions { display: flex; gap: .5rem; align-items: center; }
+
+.center { text-align: center; }
+
+.orders-list { display: grid; gap: 1rem; }
+.order-card { padding: 1rem; }
+.order-header {
+  display: grid; grid-template-columns: 1fr auto; gap: .75rem; align-items: center;
+}
+.order-title { margin: 0; text-transform: none; }
+.order-sub { margin: .25rem 0 0; opacity: .85; }
+.order-items { margin-top: .75rem; }
+
+.btn-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+/* רספונסיביות */
+@media screen and (max-width: 992px) {
+  .checkout-grid { grid-template-columns: 1fr; }
+}
+/* ===== Orders Page – polished to match store style ===== */
+
+.orders-section { padding-top: 2rem; min-height: 60vh; }
+
+.section-head {
+  max-width: 1170px;
+  width: 90vw;
+  margin: 0 auto 1rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: .75rem;
+}
+
+.section-title h2 {
+  text-align: left;            /* נשארת טיפוגרפיה קיימת אך מיושרת לפינה */
+  margin-bottom: 0;            /* אין רווח כפול */
+}
+
+.section-actions {
+  display: flex; gap: .5rem; align-items: center;
+}
+
+/* כפתור חזרה – שומר שפה ויזואלית */
+.btn-outline {
+  background: transparent;
+  color: var(--primaryColor);
+  border: 1px solid var(--primaryColor);
+  padding: .55rem 1rem;
+  text-transform: uppercase;
+  letter-spacing: var(--mainSpacing);
+  cursor: pointer;
+  transition: var(--mainTransition);
+}
+.btn-outline:hover { background: var(--primaryColor); color: var(--mainWhite); }
+.btn-sm { padding: .45rem 0.9rem; }
+
+.error-msg { color: #b00020; }
+.center { text-align: center; }
+
+/* ריקון – empty state */
+.empty-state {
+  max-width: 520px;
+  width: 90vw;
+  margin: 2rem auto 0;
+  background: var(--mainWhite);
+  border: 1px solid #eee;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  border-radius: 6px;
+}
+.empty-state i { font-size: 2.1rem; opacity: .5; display: block; margin-bottom: .5rem; }
+.empty-state p { margin-bottom: 1rem; }
+
+/* רשימת הזמנות */
+.orders-list {
+  width: 90vw; max-width: 1170px; margin: 1rem auto 2rem;
+  display: grid; gap: 1rem;
+}
+
+/* כרטיס הזמנה */
+.card {
+  background: var(--mainWhite);
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 1rem;
+  transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
+}
+.card:hover { box-shadow: 0 6px 22px rgba(0,0,0,.06); transform: translateY(-1px); border-color: #e6e6e6; }
+
+.order-card.open { border-color: var(--primaryColor); }
+
+/* כותרת הכרטיס */
+.order-header {
+  display: grid; grid-template-columns: 1fr auto; gap: .75rem; align-items: center;
+}
+.order-title { margin: 0; font-size: 1.15rem; letter-spacing: .02em; }
+.order-sub { margin: .25rem 0 0; opacity: .85; }
+
+/* סטטוס + כפתור */
+.order-status { display: flex; gap: .5rem; align-items: center; }
+
+/* באדג'ים לפי סטטוסים נפוצים */
+.badge {
+  display: inline-block;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  font-size: .8rem;
+  letter-spacing: .02em;
+  background: #eee;
+  color: var(--mainBlack);
+  text-transform: capitalize;
+  border: 1px solid rgba(0,0,0,.05);
+}
+.badge-pending   { background: #fff1e3; color: #8a4b00; border-color: #ffd9b3; }
+.badge-paid      { background: #e9fce9; color: #1f6b1f; border-color: #c7f0c7; }
+.badge-shipped   { background: #e7f2ff; color: #115a9b; border-color: #cde6ff; }
+.badge-cancelled { background: #ffe8ea; color: #a11a2a; border-color: #ffc2c9; }
+
+/* מפריד לפני הפריטים */
+.divider { height: 1px; background: #eee; margin: .85rem 0; }
+
+/* פריטי הזמנה – ממחזר את מבנה cart-item הקיים ומשפר */
+.order-items { margin-top: .5rem; display: grid; gap: .75rem; }
+.order-items .cart-item {
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: .5rem;
+}
+
+/* רספונסיביות */
+@media screen and (max-width: 768px) {
+  .section-head { grid-template-columns: 1fr; gap: .5rem; }
+  .section-actions { justify-content: flex-start; }
+}

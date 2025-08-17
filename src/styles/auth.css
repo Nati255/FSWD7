@@ -1,0 +1,26 @@
+.auth-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  display: grid; place-items: center; z-index: 9999;
+}
+.auth-card {
+  width: min(92vw, 420px); background: var(--mainWhite); color: var(--mainBlack);
+  border-radius: 8px; box-shadow: var(--darkShadow);
+  padding: 1.25rem 1.25rem 1.5rem; position: relative;
+}
+.auth-close {
+  position: absolute; top: .4rem; right: .6rem; border: none; background: transparent;
+  font-size: 1.6rem; cursor: pointer; color: var(--primaryColor);
+}
+.auth-tabs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-bottom: 1rem;
+}
+.auth-tab {
+  padding: .6rem .8rem; border: 1px solid var(--primaryColor); background: transparent;
+  text-transform: uppercase; letter-spacing: var(--mainSpacing); cursor: pointer;
+}
+.auth-tab.active { background: var(--primaryColor); color: white; }
+.auth-form { display: grid; gap: .6rem; }
+.auth-form input {
+  border: 1px solid #ddd; padding: .6rem .8rem; font-size: 1rem;
+}
+.error-msg { color: #c03535; margin-top: .4rem; }

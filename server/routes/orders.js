@@ -45,7 +45,8 @@ router.get('/:orderId', authenticate, async (req, res, next) => {
 
 router.get('/', authenticate, isAdmin, async (req, res, next) => {
   try {
-    const orders = await getAllOrders();
+    const { status, q } = req.query; // ?status=paid&q=gmail
+    const orders = await getAllOrdersWithAgg({ status, q });
     res.json(orders);
   } catch (err) {
     next(err);
@@ -60,17 +61,6 @@ router.patch('/:orderId/status', authenticate, isAdmin, async (req, res, next) =
     if (!ok) return res.status(404).json({ error: 'Order not found' });
     const fresh = await getOrderDetails(orderId);
     res.json(fresh);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// 📄 כל ההזמנות עם פילטרים (admin) ?status=paid&q=gmail
-router.get('/', authenticate, isAdmin, async (req, res, next) => {
-  try {
-    const { status, q } = req.query;
-    const orders = await getAllOrdersWithAgg({ status, q });
-    res.json(orders);
   } catch (err) {
     next(err);
   }
