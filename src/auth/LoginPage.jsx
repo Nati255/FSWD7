@@ -38,12 +38,11 @@ function LoginPage() {
       // שמור טוקן
       localStorage.setItem('token', token);
 
-      // קח role מהתשובה או מה־JWT
       const explicitRole = (res.data?.user?.role || res.data?.role || '').toString().toLowerCase();
       const role = explicitRole || getRoleFromToken(token) || 'customer';
       localStorage.setItem('role', role);
 
-      // הפניה לפי role
+      //role הפניה לפי 
       if(role === 'admin'){
         navigate('/admin', { replace: true });
       }

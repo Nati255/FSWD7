@@ -12,7 +12,7 @@ connection.connect((err) => {
   console.log('Connected to ecommerce DB');
 
   const queries = [
-    { table: 'users', sql: 'SELECT * FROM users LIMIT 5' },
+    { table: 'users', sql: 'SELECT * FROM users ' },
     { table: 'products', sql: 'SELECT * FROM products' },
     { table: 'orders', sql: 'SELECT * FROM orders' },
     { table: 'order_items', sql: 'SELECT * FROM order_items' },

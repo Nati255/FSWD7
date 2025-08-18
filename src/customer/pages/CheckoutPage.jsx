@@ -49,7 +49,6 @@ export default function CheckoutPage() {
       <div className="section-title"><h2>checkout</h2></div>
 
       <div className="checkout-grid">
-        {/* כרטיס: טופס פרטים */}
         <article className="card">
           <h3 className="card-title">shipping details</h3>
           <form className="form-grid" onSubmit={placeOrder}>
@@ -67,7 +66,7 @@ export default function CheckoutPage() {
           </form>
         </article>
 
-        {/* כרטיס: סיכום עגלה */}
+        
         <article className="card">
           <h3 className="card-title">order summary</h3>
           <div className="cart-content">

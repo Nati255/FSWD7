@@ -34,11 +34,6 @@ export default function OrdersPage() {
           <div className="section-title">
             <h2>my orders</h2>
           </div>
-          <div className="section-actions">
-            <button className="btn-outline" onClick={() => nav(-1)}>
-              <i className="fas fa-arrow-left" /> Back
-            </button>
-          </div>
         </div>
 
         {err && <p className="error-msg center">{err}</p>}
@@ -46,7 +41,7 @@ export default function OrdersPage() {
           <div className="empty-state">
             <i className="far fa-box" />
             <p>No orders yet.</p>
-            <a href="#products" className="banner-btn">Shop now</a>
+            <a href="/home/customer/products" className="banner-btn">Shop now</a>
           </div>
         )}
 

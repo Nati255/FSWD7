@@ -1,4 +1,3 @@
-// routes/cart.js
 import express from 'express';
 import {
   getCartByUserId,
@@ -41,7 +40,7 @@ router.put('/', authenticate,  async (req, res, next) => {
 
 router.delete('/:userId/:productId', authenticate, authorizeSelfOrAdmin(), async (req, res, next) => {
   try {
-    const userId = req.user.id; // ← מתעלם מה-:userId בנתיב
+    const userId = req.user.id; 
     const { productId } = req.params;
     const cart = await removeCartItem(userId, productId);
     res.json(cart);
@@ -51,7 +50,7 @@ router.delete('/:userId/:productId', authenticate, authorizeSelfOrAdmin(), async
 // מנקה סל
 router.delete('/:userId', authenticate, authorizeSelfOrAdmin(), async (req, res, next) => {
   try {
-    const userId = req.user.id; // ← מתעלם מה-:userId בנתיב
+    const userId = req.user.id; 
     const cart = await clearCart(userId);
     res.json(cart);
   } catch (err) { next(err); }

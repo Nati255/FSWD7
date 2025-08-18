@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 import usersRouter from './routes/users.js';
-import productsRouter from './routes/ptroducts.js';
+import productsRouter from './routes/products.js';
 import cartRouter from './routes/cart.js';
 import ordersRouter from './routes/orders.js';
 import authRouter from './routes/auth.js';

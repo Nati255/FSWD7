@@ -1,4 +1,3 @@
-// src/auth/RegisterPage.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
@@ -23,7 +22,7 @@ function RegisterPage() {
         username,
         email,
         password,
-        role: 'customer', // 👈 תמיד לקוח
+        role: 'customer', 
       });
       navigate('/login', { replace: true });
     } catch (err) {
@@ -72,7 +71,6 @@ function RegisterPage() {
         {error && <p className="error-msg">{error}</p>}
       </form>
 
-      {/* קישור חזרה לכניסה */}
       <p className="switch-auth">
         Already have an account? <Link to="/login">Back to Login</Link>
       </p>

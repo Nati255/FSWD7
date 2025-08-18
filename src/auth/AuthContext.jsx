@@ -44,7 +44,7 @@ export function AuthProvider({ children }) {
     localStorage.setItem("token", t);
     localStorage.setItem("role", d.role);
     setToken(t); setRole(d.role); setUserId(d.id);
-    return d.role; // נחזיר role כדי לנווט לאדמין אם צריך
+    return d.role; 
   }, []);
 
   const register = useCallback(async ({ full_name, username, email, password }) => {

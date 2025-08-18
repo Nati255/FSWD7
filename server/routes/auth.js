@@ -4,9 +4,8 @@ import jwt from 'jsonwebtoken';
 import db from '../db/db.js';
 
 const router = express.Router();
-const SECRET = 'mySecretKey'; // אפשר להעביר לקובץ .env
+const SECRET = 'mySecretKey';
 
-// Register
 router.post('/register', async (req, res, next) => {
   try {
     const { full_name, username, email, password, role } = req.body;
@@ -34,7 +33,6 @@ router.post('/register', async (req, res, next) => {
   }
 });
 
-// Login
 router.post('/login', async (req, res, next) => {
   try {
     const { email, password } = req.body;

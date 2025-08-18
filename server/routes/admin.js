@@ -1,4 +1,3 @@
-// server/routes/admin.js
 import express from 'express';
 import { authenticate } from '../middleware/auth.js';
 import { isAdmin } from '../middleware/isAdmin.js';

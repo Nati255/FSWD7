@@ -202,7 +202,6 @@ export default function AdminProducts() {
                         </span>
                       </td>
                       <td className="actions">
-                        {/* ✅ שינוי: אין inline. רק כפתור שפותח את אותו מודאל */}
                         <button className="btn-ghost" onClick={() => openEdit(p)}>
                           <i className="fas fa-edit" /> Edit
                         </button>
@@ -226,7 +225,6 @@ export default function AdminProducts() {
           )}
         </section>
 
-        {/* ✅ שינוי: מודאל אחד לשני המצבים (create/edit) */}
         {modal.open && (
           <div className="modal-backdrop" onClick={closeModal}>
             <div className="modal" onClick={(e) => e.stopPropagation()}>

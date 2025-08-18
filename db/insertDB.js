@@ -26,16 +26,16 @@ connection.connect(async (err) => {
 
 function insertProducts() {
   const products = [
-    ['Queen Panel Bed', 'Elegant and comfortable queen-size panel bed.', 499.99, 10, 'https://example.com/images/product1.jpg', 'furniture'],
-    ['King Panel Bed', 'Spacious and luxurious king-size panel bed.', 599.99, 8, 'https://example.com/images/product2.jpg', 'furniture'],
-    ['Single Panel Bed', 'Simple and compact single panel bed.', 299.99, 15, 'https://example.com/images/product3.jpg', 'furniture'],
-    ['Twin Panel Bed', 'Comfortable twin-size panel bed.', 349.99, 12, 'https://example.com/images/product4.jpg', 'furniture'],
-    ['Fridge', 'Large capacity fridge with freezer.', 799.99, 5, 'https://example.com/images/product5.jpg', 'appliances'],
-    ['Dresser', 'Wooden dresser with multiple drawers.', 259.99, 9, 'https://example.com/images/product6.jpg', 'furniture'],
-    ['Couch', 'Modern and comfy 3-seater couch.', 699.99, 4, 'https://example.com/images/product7.jpg', 'furniture'],
-    ['Dining Table', 'Spacious dining table for 6.', 399.99, 6, 'https://example.com/images/product8.jpg', 'furniture'],
-    ['Microwave', 'High-efficiency microwave oven.', 149.99, 20, 'https://example.com/images/product9.jpg', 'appliances'],
-    ['Bookshelf', '5-tier wooden bookshelf.', 199.99, 10, 'https://example.com/images/product10.jpg', 'furniture']
+    ['Queen Panel Bed', 'Elegant and comfortable queen-size panel bed.', 499.99, 10, '../src/images/product-1.jpeg', 'furniture'],
+    ['King Panel Bed', 'Spacious and luxurious king-size panel bed.', 599.99, 8, '../src/images/product-2.jpeg', 'furniture'],
+    ['Single Panel Bed', 'Simple and compact single panel bed.', 299.99, 15, '../src/images/product-3.jpeg', 'furniture'],
+    ['Twin Panel Bed', 'Comfortable twin-size panel bed.', 349.99, 12, '../src/images/product-4.jpeg', 'furniture'],
+    ['Fridge', 'Large capacity fridge with freezer.', 799.99, 5, '../src/images/product-5.jpeg', 'appliances'],
+    ['Dresser', 'Wooden dresser with multiple drawers.', 259.99, 9, '../src/images/product-6.jpeg', 'furniture'],
+    ['Couch', 'Modern and comfy 3-seater couch.', 699.99, 4, '../src/images/product-7.jpeg', 'furniture'],
+    ['Dining Table', 'Spacious dining table for 6.', 399.99, 6, '../src/images/product-8.jpeg', 'furniture'],
+    ['Microwave', 'High-efficiency microwave oven.', 149.99, 20, '../src/images/product-9.jpeg', 'appliances'],
+    ['Bookshelf', '5-tier wooden bookshelf.', 199.99, 10, '../src/images/product-10.jpeg', 'furniture']
   ];
 
   return new Promise((resolve, reject) => {

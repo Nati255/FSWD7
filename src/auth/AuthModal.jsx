@@ -21,6 +21,9 @@ export default function AuthModal() {
       const role = await login({ email, password });
       setLoading(false); closeAuth();
       if (role === "admin") nav("/admin", { replace: true });
+      else {
+        nav("/home/customer", { replace: true });
+      }
     } catch {
       setLoading(false); setErr("Login failed. Check your credentials.");
     }

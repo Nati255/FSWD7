@@ -1,4 +1,3 @@
-// src/pages/admin/AdminOrders.jsx
 import React, { useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import AdminSidebar from '../../admin/components/AdminSidebar';
@@ -11,7 +10,7 @@ export default function AdminOrders() {
   const [q, setQ] = useState('');
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
-  const [selected, setSelected] = useState(null); // להצגת פרטי הזמנה (Modal)
+  const [selected, setSelected] = useState(null); 
   const token = localStorage.getItem('token');
 
   const fetchOrders = async () => {
@@ -27,7 +26,7 @@ export default function AdminOrders() {
     setLoading(false);
   };
 
-  useEffect(() => { fetchOrders(); /* eslint-disable-next-line */ }, []);
+  useEffect(() => { fetchOrders(); }, []);
 
   const filteredCount = useMemo(() => orders.length, [orders]);
 
@@ -150,8 +149,6 @@ export default function AdminOrders() {
           </div>
         </section>
       </main>
-
-      {/* Modal לפרטי הזמנה */}
       {selected && (
         <div className="modal-overlay" onClick={() => setSelected(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>

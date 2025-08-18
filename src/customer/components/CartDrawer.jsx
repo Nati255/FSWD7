@@ -1,5 +1,3 @@
-// src/common/components/CartDrawer.jsx
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../customer/context/CartContext";
 import { useAuth } from "../../auth/AuthContext";
@@ -9,6 +7,7 @@ const CloseIcon = () => <i className="fas fa-window-close" />;
 const UpIcon = () => <i className="fas fa-chevron-up" />;
 const DownIcon = () => <i className="fas fa-chevron-down" />;
 const safeUrl = (u) => (typeof u === "string" && u.trim() ? u : null);
+
 export default function CartDrawer() {
   const { drawerOpen, close, items, total, inc, dec, remove, clear } = useCart();
   const { isAuth, openAuth } = useAuth();
@@ -46,7 +45,7 @@ export default function CartDrawer() {
             <button className="clear-cart banner-btn" onClick={clear}>clear cart</button>
             <button
               className="banner-btn"
-              onClick={() => (!items.length ? null : (isAuth ? nav("/checkout") : openAuth()))}
+              onClick={() => (!items.length ? null : (isAuth ? nav("/home/checkout") : openAuth()))}
               disabled={items.length === 0}
             >
               checkout

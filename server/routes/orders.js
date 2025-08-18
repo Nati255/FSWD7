@@ -22,7 +22,6 @@ router.post('/:userId', authenticate, authorizeSelfOrAdmin(), async (req, res, n
   }
 });
 
-// שליפת כל ההזמנות של משתמש
 router.get('/user/:userId', authenticate, authorizeSelfOrAdmin(), async (req, res, next) => {
   try {
     const orders = await getOrdersByUserId(req.params.userId);
@@ -32,7 +31,6 @@ router.get('/user/:userId', authenticate, authorizeSelfOrAdmin(), async (req, re
   }
 });
 
-// פרטי הזמנה בודדת
 router.get('/:orderId', authenticate, async (req, res, next) => {
   try {
     const order = await getOrderDetails(req.params.orderId);

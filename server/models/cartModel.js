@@ -1,4 +1,3 @@
-// models/cartModel.js
 import db from '../db/db.js';
 
 export async function reconcileCart(userId) {
@@ -30,7 +29,7 @@ export async function getCartByUserId(userId) {
       c.product_id AS id,
       c.amount,
       p.title,
-      p.price,         -- מחיר עדכני
+      p.price,         
       p.image_url,
       p.stock
     FROM cart_items c
@@ -51,16 +50,15 @@ export async function getCartByUserId(userId) {
   
 }
 
-// יצירת/עדכון פריט בעגלה (פותח "עגלה" אם עדיין אין)
+
 export async function addToCart(userId, productId, amount = 1) {
   if (!userId || !productId) throw new Error('Missing user or product ID');
 
   const [rows] = await db.query('SELECT stock FROM products WHERE id = ?', [productId]);
   const product = rows[0];
   if (!product) throw new Error('Product not found');
-  if (product.stock <= 0) return getCartByUserId(userId); // אפשר גם לזרוק שגיאה "Out of stock"
+  if (product.stock <= 0) return getCartByUserId(userId); 
 
-  // הוספה/עדכון אטומיים: לא לעבור את ה־stock
   await db.query(
     `INSERT INTO cart_items (user_id, product_id, amount)
      VALUES (?, ?, LEAST(?, ?))

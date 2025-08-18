@@ -19,7 +19,7 @@ export default function AdminDashboard() {
     setLoading(false);
   };
 
-  useEffect(() => { fetchStats(); /* eslint-disable-line */ }, []);
+  useEffect(() => { fetchStats();  }, []);
 
   return (
     <div className="admin-wrapper">

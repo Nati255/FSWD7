@@ -1,8 +1,18 @@
-// src/common/components/Footer.jsx
-import React from "react";
 import "../../styles/HomeShop.css";
-
+import { useAuth } from "../../auth/AuthContext";
+import { useCart } from "../../customer/context/CartContext";
 export default function Footer() {
+  const { isAuth, openAuth } = useAuth();
+  const { open } = useCart();
+
+  const homeHref = isAuth ? "/home/customer" : "/home";
+  const productsHref = isAuth ? "/home/customer/products" : "/home/products";
+
+  const handleCartClick = (e) => {
+    if (isAuth) open();
+    else openAuth();
+  };
+
   return (
     <footer className="site-footer">
       <div className="footer-container">
@@ -14,9 +24,9 @@ export default function Footer() {
         <div className="footer-section">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#products">Products</a></li>
-            <li><a href="#cart">Cart</a></li>
+            <li><a href={homeHref}>Home</a></li>
+            <li><a href={productsHref}>Products</a></li>
+            <li><a href="#cart" onClick={handleCartClick}>Cart</a></li>
           </ul>
         </div>
 

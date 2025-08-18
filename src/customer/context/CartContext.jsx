@@ -1,4 +1,3 @@
-// src/customer/context/CartContext.jsx
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../auth/AuthContext";
 const CartCtx = createContext(null);

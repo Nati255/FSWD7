@@ -83,7 +83,7 @@ export async function getAllOrders() {
   return rows;
 }
 export async function updateOrderStatus(orderId, nextStatus) {
-  // ולידציה בסיסית לסטטוס (תואם לטבלת orders)
+
   const valid = ['pending', 'paid', 'shipped', 'cancelled'];
   if (!valid.includes(nextStatus)) throw new Error('Invalid status');
 
@@ -95,7 +95,6 @@ export async function updateOrderStatus(orderId, nextStatus) {
 }
 
 export async function getAllOrdersWithAgg({ status, q }) {
-  // חיפוש לפי מייל/שם + פילטר סטטוס (לבחירה)
   const params = [];
   let where = 'WHERE 1=1';
   if (status) {
