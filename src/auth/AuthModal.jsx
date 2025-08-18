@@ -24,8 +24,8 @@ export default function AuthModal() {
       else {
         nav("/home/customer", { replace: true });
       }
-    } catch {
-      setLoading(false); setErr("Login failed. Check your credentials.");
+    } catch(e) {
+      setLoading(false); setErr(e?.message || "Login failed. Check your credentials.");
     }
   };
 

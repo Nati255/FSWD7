@@ -1,4 +1,4 @@
-/* ✅ Admin page layout – grid with sidebar + content */
+/* Admin page layout – grid with sidebar + content */
 .admin-wrapper {
   display: grid;
   grid-template-columns: 240px 1fr; /* regular desktop */

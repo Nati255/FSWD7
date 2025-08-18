@@ -214,19 +214,15 @@
   gap: 0.6rem; 
 }
 
-/* === Row Card Border (מסגרת לכל רשומה) === */
-
-/* בטל את הקו התחתון הישן של כל תא */
 .admin-table td { border-bottom: none; }
 
-/* מסגרת רציפה סביב כל שורה: קו עליון/תחתון לכל התאים,
-   וקו שמאל/ימין רק לתא הראשון/האחרון */
+
 .admin-table tbody td {
-  background: #fff;                 /* שיהיה לבן ונקי */
+  background: #fff;                 
   border-radius: 12px 0 0 12px;
 }
-/* הובר עדין לכל השורה (רק מחליף צבע מסגרת/רקע) */
+
 .admin-table tbody tr:hover td {
-  border-color: #f0c9a3;            /* אפשר להחליף ל-var(--primaryColor) אם בא לך */
+  border-color: #f0c9a3;            
   background: #fffaf6;
 }

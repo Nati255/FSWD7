@@ -1,4 +1,4 @@
-/* ✅ Sidebar – only sidebar styles */
+
 .admin-sidebar {
   position: sticky;
   top: 0;
@@ -9,8 +9,8 @@
   flex-direction: column;
   padding: 1rem;
   gap: 1rem;
-  min-width: 0; /* Allow shrinking within grid */
-  overflow-y: auto; /* Handle content overflow */
+  min-width: 0; 
+  overflow-y: auto; 
 }
 
 .sidebar-nav {
@@ -77,7 +77,6 @@
   color: var(--primaryColor);
 }
 
-/* ✅ Tablet – icons only with better spacing */
 @media (max-width: 900px) {
   .admin-sidebar {
     padding: 0.75rem 0.5rem;
@@ -100,7 +99,7 @@
   
   .sidebar-link span,
   .sidebar-logout span {
-    display: none; /* Only icons remain */
+    display: none;
   }
   
   .sidebar-icon {
@@ -110,7 +109,7 @@
   }
 }
 
-/* ✅ Mobile – smaller icons and tighter spacing */
+
 @media (max-width: 768px) {
   .admin-sidebar {
     padding: 0.6rem 0.4rem;
@@ -133,7 +132,6 @@
   }
 }
 
-/* ✅ Very small screens */
 @media (max-width: 480px) {
   .admin-sidebar {
     padding: 0.5rem 0.3rem;

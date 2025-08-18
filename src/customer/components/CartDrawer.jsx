@@ -1,13 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../customer/context/CartContext";
 import { useAuth } from "../../auth/AuthContext";
+import { normalizeImageUrl } from "../../utils/imageUrl";
 import "../../styles/HomeShop.css";
 
 const CloseIcon = () => <i className="fas fa-window-close" />;
 const UpIcon = () => <i className="fas fa-chevron-up" />;
 const DownIcon = () => <i className="fas fa-chevron-down" />;
-const safeUrl = (u) => (typeof u === "string" && u.trim() ? u : null);
-
+const toImgSrc = (u) => {
+  if (!u) return "";
+  const s = String(u).trim();
+  if (!s || s.startsWith("/api/")) return "";
+  return normalizeImageUrl(s);
+};
+const pickImage = (it) =>
+  toImgSrc(it.image_url || it.image || it.img || it.thumbnail || it.thumb);
 export default function CartDrawer() {
   const { drawerOpen, close, items, total, inc, dec, remove, clear } = useCart();
   const { isAuth, openAuth } = useAuth();
@@ -21,11 +28,13 @@ export default function CartDrawer() {
         <div className="cart-content">
           {items.map((it) => (
             <div className="cart-item" key={it.id}>
-              {safeUrl(it.image_url) ? (
-                <img src={safeUrl(it.image_url)} alt="product" />
-              ) : (
-                <div style={{ width: 75, height: 75 }} />
-              )}
+              <img
+                src={pickImage(it) || " "}
+                alt={it.title || "product"}
+                width={75}
+                height={75}
+                onError={(e) => { e.currentTarget.src = " "; }}
+              />
               <div>
                 <h4>{it.title}</h4>
                 <h5>${Number(it.price).toFixed(2)}</h5>

@@ -1,4 +1,3 @@
-/* ===== Checkout & Orders (match store look) ===== */
 .checkout-section, .orders-section { padding-top: 2rem; min-height: 60vh; }
 
 .checkout-grid {
@@ -38,11 +37,11 @@
 
 .btn-row { display: flex; gap: .5rem; flex-wrap: wrap; }
 
-/* רספונסיביות */
+
 @media screen and (max-width: 992px) {
   .checkout-grid { grid-template-columns: 1fr; }
 }
-/* ===== Orders Page – polished to match store style ===== */
+
 
 .orders-section { padding-top: 2rem; min-height: 60vh; }
 

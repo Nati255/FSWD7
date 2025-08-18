@@ -31,7 +31,7 @@ export function CartProvider({ children }) {
       setCart({ items: [], total: 0 });
       return;
     }
-    const res = await fetch(`http://localhost:3001/api/cart/${userId}`, { headers }); // ← backticks!
+    const res = await fetch(`http://localhost:3001/api/cart/${userId}`, { headers }); 
     if (!res.ok) throw new Error(`Failed to load cart (${res.status})`);
     const data = await res.json(); // { items, total }
     setCart(data);

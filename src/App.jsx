@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AdminDashboard from './admin/pages/AdminDashboard';
 import CustomerHome from './customer/pages/CustomerHome';
-import AdminProducts from './admin/components/AdminProducts';
+import AdminProducts from './admin/pages/AdminProducts';
 import AdminOrders from './admin/pages/AdminOrders';
 import { AuthProvider, useAuth } from './auth/AuthContext';
 import { CartProvider } from "./customer/context/CartContext";

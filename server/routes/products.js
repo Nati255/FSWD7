@@ -8,6 +8,8 @@ import {
 } from '../models/productsModel.js';
 import { authenticate } from '../middleware/auth.js';
 import { isAdmin } from '../middleware/isAdmin.js';
+import path from 'path';
+import fs from 'fs';
 
 const router = express.Router();
 
@@ -41,8 +43,18 @@ router.post('/', authenticate, isAdmin, async (req, res, next) => {
 
 router.put('/:id', authenticate, isAdmin, async (req, res, next) => {
   try {
-    const product = await updateProduct(req.params.id, req.body);
-    res.json(product);
+    const id = req.params.id;
+    const prev = await getProductById(id);
+    if (!prev) return res.status(404).json({ error: 'Product not found' });
+    const updated = await updateProduct(id, req.body);
+    if (req.body.image_url && req.body.image_url !== prev.image_url) {
+      if (prev.image_url && prev.image_url.startsWith('/uploads/')) {
+        const rel = prev.image_url.replace(/^\//, ''); 
+        const abs = path.join(process.cwd(), rel); 
+        fs.unlink(abs, () => {});
+      }
+    }
+    res.json(updated);
   } catch (err) {
     next(err);
   }
@@ -50,7 +62,17 @@ router.put('/:id', authenticate, isAdmin, async (req, res, next) => {
 
 router.delete('/:id', authenticate, isAdmin, async (req, res, next) => {
   try {
-    const result = await deleteProduct(req.params.id);
+    const id = req.params.id;
+    const prev = await getProductById(id);
+    if (!prev) return res.status(404).json({ error: 'Product not found' });
+
+    const result = await deleteProduct(id);
+
+    if (prev.image_url && prev.image_url.startsWith('/uploads/')) {
+      const rel = prev.image_url.replace(/^\//, '');
+      const abs = path.join(process.cwd(), rel);
+      fs.unlink(abs, () => {});
+    }
     res.json(result);
   } catch (err) {
     next(err);

@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CartDrawer from "../components/CartDrawer";
+import { normalizeImageUrl } from "../../utils/imageUrl";
 import "../../styles/Order.css";
-const safeUrl = (u) => (typeof u === "string" && u.trim() ? u : null);
+
 const API = import.meta.env?.VITE_API_BASE || "http://localhost:3001";
 const fmtDate = (s) => { try { return new Date(s).toLocaleString(); } catch { return s; } };
 
@@ -60,11 +61,27 @@ function OrderCard({ order, headers }) {
   const [details, setDetails] = useState(null);
 
   const API = import.meta.env?.VITE_API_BASE || "http://localhost:3001";
+
+  const toImgSrc = (u) => {
+    if (!u) return "";
+    const s = String(u).trim();
+    if (!s || s.startsWith("/api/")) return "";
+    return normalizeImageUrl(s);
+  };
+
+  const pickImage = (it) =>
+    toImgSrc(it.image_url || it.image || it.img || it.thumbnail || it.thumb);
+
   const toggle = async () => {
     if (!open && !details) {
       const res = await fetch(`${API}/api/orders/${order.id}`, { headers });
-      const data = await res.json();
-      setDetails(data);
+      if (!res.ok) {
+         setDetails({ items: [] });
+        }
+      else{
+        const data = await res.json();
+        setDetails(data);
+      }
     }
     setOpen(!open);
   };
@@ -94,9 +111,13 @@ function OrderCard({ order, headers }) {
           <div className="order-items">
             {details.items.map((it, idx) => (
               <div className="cart-item" key={idx}>
-                {it.image_url?.trim()
-                  ? <img src={it.image_url} alt="product" />
-                  : <div style={{ width: 75, height: 75 }} />}
+                <img
+                  src={pickImage(it) || " "}
+                  alt={it.title || "product"}
+                  width={75}
+                  height={75}
+                  onError={(e) => { e.currentTarget.src = " "; }}
+                />
                 <div>
                   <h4>{it.title}</h4>
                   <h5>${Number(it.price_at_order).toFixed(2)}</h5>

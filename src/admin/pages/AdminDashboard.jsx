@@ -61,8 +61,7 @@ export default function AdminDashboard() {
             ) : (stats.top_products?.length ?? 0) === 0 ? (
               <div className="empty-state">
                 <i className="fas fa-box-open"></i>
-                <h3>אין נתונים להצגה</h3>
-                <p>אין מכירות בטווח 30 הימים האחרונים.</p>
+                <h3>No data</h3>
               </div>
             ) : (
               stats.top_products.map((p, idx) => (

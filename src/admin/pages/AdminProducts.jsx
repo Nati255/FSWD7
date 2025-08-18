@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AdminSidebar from './AdminSidebar';
+import AdminSidebar from '../components/AdminSidebar';
+import { normalizeImageUrl } from "../../utils/imageUrl";
 import '../../styles/adminProduct.css'; 
 import axios from 'axios';
 
@@ -63,12 +64,12 @@ export default function AdminProducts() {
 
   const openEdit = (p) => {
     setDraft({
-      title: p.title || '',
-      description: p.description || '',
-      price: p.price ?? '',
-      stock: p.stock ?? '',
-      image_url: p.image_url || '',
-      category: p.category || ''
+      title: String(p.title ?? ''),
+      description: String(p.description ?? ''),
+      price: p.price != null ? String(p.price) : '',
+      stock: p.stock != null ? String(p.stock) : '',
+      image_url: String(p.image_url ?? ''),
+      category: String(p.category ?? '')
     });
     setModal({ open: true, mode: 'edit', id: p.id });
   };
@@ -130,15 +131,50 @@ export default function AdminProducts() {
       alert(e.response?.data?.error || e.message || 'שגיאה במחיקה');
     }
   };
+
+  function toImgSrc(u) {
+  if (!u) return "";
+  const s = String(u).trim();
+  if (!s || s.startsWith("/api/")) return "";     // לא מנסים לטעון API בתור תמונה
+  return normalizeImageUrl(s);
+}
+
   const Img = ({ src, alt }) => (
     <img
-      src={src || " "}
+      src={toImgSrc(src) || " "}
       alt={alt || 'product'}
       className="admin-prod-thumb"
       onError={(ev) => { ev.currentTarget.src = " "; }}
     />
   );
 
+  const [uploading, setUploading] = useState(false);
+  const API_ROOT = "http://localhost:3001";
+  async function onUploadImage(file) {
+  if (!file) return;
+  try {
+    setUploading(true);
+    const fd = new FormData();
+    fd.append('image', file);
+
+    const token = localStorage.getItem('token');
+    const res = await fetch(`${API_ROOT}/api/upload`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      body: fd, // שים לב: לא מגדירים Content-Type ידנית
+    });
+
+    if (!res.ok) throw new Error(`Upload failed (${res.status})`);
+    const data = await res.json();
+
+    // ממלאים את שדה ה-URL בטופס אוטומטית
+    setDraft((d) => ({ ...d, image_url: data.url }));
+  } catch (err) {
+    alert(err.message || 'Upload failed');
+  } finally {
+    setUploading(false);
+  }
+}
   return (
     <div className="admin-wrapper">
       <AdminSidebar />
@@ -246,7 +282,7 @@ export default function AdminProducts() {
                   <span>Title *</span>
                   <input
                     type="text"
-                    value={draft.title}
+                    value={draft.title ?? ''}
                     onChange={(e) => setDraft(d => ({ ...d, title: e.target.value }))}
                     required
                   />
@@ -256,7 +292,7 @@ export default function AdminProducts() {
                   <span>Category</span>
                   <input
                     type="text"
-                    value={draft.category}
+                    value={draft.category ?? ''}
                     onChange={(e) => setDraft(d => ({ ...d, category: e.target.value }))}
                   />
                 </label>
@@ -266,7 +302,7 @@ export default function AdminProducts() {
                   <input
                     type="number"
                     step="0.01"
-                    value={draft.price}
+                    value={draft.price ?? ''}
                     onChange={(e) => setDraft(d => ({ ...d, price: e.target.value }))}
                     required
                   />
@@ -277,7 +313,7 @@ export default function AdminProducts() {
                   <input
                     type="number"
                     step="1"
-                    value={draft.stock}
+                    value={draft.stock ?? ''}
                     onChange={(e) => setDraft(d => ({ ...d, stock: e.target.value }))}
                     required
                   />
@@ -287,16 +323,25 @@ export default function AdminProducts() {
                   <span>Image URL</span>
                   <input
                     type="text"
-                    value={draft.image_url}
+                    value={draft.image_url ?? ''}
                     onChange={(e) => setDraft(d => ({ ...d, image_url: e.target.value }))}
                   />
                 </label>
-
+                <label className="full">
+                  <span>Upload Image</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => onUploadImage(e.target.files?.[0])}
+                    disabled={uploading}
+                  />
+                  {uploading && <small className="muted">Uploading…</small>}
+                </label>
                 <label className="full">
                   <span>Description</span>
                   <textarea
                     rows={3}
-                    value={draft.description}
+                    value={draft.description ?? ''}
                     onChange={(e) => setDraft(d => ({ ...d, description: e.target.value }))}
                   />
                 </label>

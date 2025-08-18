@@ -32,19 +32,36 @@ export function AuthProvider({ children }) {
   const closeAuth = () => setAuthOpen(false);
 
   const login = useCallback(async ({ email, password }) => {
-    const res = await fetch(`${API}/api/auth/login`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
-    if (!res.ok) throw new Error("Login failed");
-    const data = await res.json();
-    const t = data?.token;
-    if (!t) throw new Error("Missing token");
-    const d = decodeToken(t);
-    localStorage.setItem("token", t);
-    localStorage.setItem("role", d.role);
-    setToken(t); setRole(d.role); setUserId(d.id);
-    return d.role; 
+    try {
+      const res = await fetch(`${API}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        // מנסים להוציא הודעה שימושית מהשרת; אם אין – נשתמש בסטטוס
+        let message = `Login failed (${res.status})`;
+        try {
+          const err = await res.json();
+          if (err?.error) message = err.error;
+          else if (err?.message) message = err.message;
+        } catch {}
+        throw new Error(message);
+      }
+
+      const data = await res.json();
+      const t = data?.token;
+      if (!t) throw new Error("Missing token");
+
+      const d = decodeToken(t);
+      localStorage.setItem("token", t);
+      localStorage.setItem("role", d.role);
+      setToken(t); setRole(d.role); setUserId(d.id);
+      return d.role;
+    } catch (e) {
+      throw new Error(e?.message || "Login failed");
+    }
   }, []);
 
   const register = useCallback(async ({ full_name, username, email, password }) => {

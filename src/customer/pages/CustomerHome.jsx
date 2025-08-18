@@ -6,9 +6,16 @@ import AuthModal from "../../auth/AuthModal";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../../auth/AuthContext";
 import { normalizeImageUrl } from "../../utils/imageUrl";
-const safeUrl = (u) => (typeof u === "string" && u.trim() ? u : null);
-import "../../styles/HomeShop.css";
 
+import "../../styles/HomeShop.css";
+const toImgSrc = (u) => {
+  if (!u) return "";
+  const s = String(u).trim();
+  if (!s || s.startsWith("/api/")) return "";
+  return normalizeImageUrl(s);
+};
+const pickImage = (it) =>
+  toImgSrc(it.image_url || it.image || it.img || it.thumbnail || it.thumb);
 export default function CustomerHome() {
   return (
     <>
@@ -103,11 +110,13 @@ function ProductsSection() {
           return (
             <article key={prod.id} className="product">
               <div className="img-container">
-                {safeUrl(prod.image) ? (
-                  <img src={safeUrl(prod.image)} alt={prod.title} className="product-img" />
-                ) : (
-                  <div className="product-img" />
-                )}
+                <img
+                        src={pickImage(prod) || " "}
+                        alt={prod.title || "product"}
+                        width={280}
+                        height={224}
+                        onError={(e) => { e.currentTarget.src = " "; }}
+                      />
                 <button
                   className="bag-btn"
                   disabled={isOut || isInCart}

@@ -8,8 +8,16 @@ import { useAuth } from "../../auth/AuthContext";
 import { normalizeImageUrl } from "../../utils/imageUrl";
 import { useSearchParams } from "react-router-dom";
 import "../../styles/HomeShop.css";
-const safeUrl = (u) => (typeof u === "string" && u.trim() ? u : null);
+
 const API = import.meta.env?.VITE_API_BASE || "http://localhost:3001";
+const toImgSrc = (u) => {
+  if (!u) return "";
+  const s = String(u).trim();
+  if (!s || s.startsWith("/api/")) return "";
+  return normalizeImageUrl(s);
+};
+const pickImage = (it) =>
+  toImgSrc(it.image_url || it.image || it.img || it.thumbnail || it.thumb);
 
 export default function ProductsPage() {
   const { items: cartItems, add } = useCart();
@@ -18,6 +26,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
+  const [displayCount, setDisplayCount] = useState(8); // Show 8 items initially
 
   const [params, setParams] = useSearchParams();
   const q    = params.get("q")    ?? "";
@@ -40,6 +49,11 @@ export default function ProductsPage() {
       .catch(e => setErr(String(e)))
       .finally(() => setLoading(false));
   }, []);
+
+  // Reset display count when filters change
+  useEffect(() => {
+    setDisplayCount(8);
+  }, [q, sort, min, max]);
 
   const inCartIds = useMemo(
     () => new Set(cartItems.map(i => String(i.id))),
@@ -73,6 +87,10 @@ export default function ProductsPage() {
     return sorted;
   }, [products, q, min, max, sort]);
 
+  // Get items to display based on current displayCount
+  const displayedProducts = filtered.slice(0, displayCount);
+  const hasMoreProducts = filtered.length > displayCount;
+
   const setParam = (key, val) => {
     const next = new URLSearchParams(params);
     if (val === "" || val == null) next.delete(key);
@@ -85,6 +103,10 @@ export default function ProductsPage() {
     ["q", "min", "max"].forEach(k => next.delete(k));
     next.set("sort", "price-asc");
     setParams(next, { replace: true });
+  };
+
+  const loadMore = () => {
+    setDisplayCount(prev => prev + 4); // Load 4 more items
   };
 
   const handleAdd = (id) => (isAuth ? add(id) : openAuth());
@@ -154,17 +176,23 @@ export default function ProductsPage() {
 
         {!loading && !err && (
           <>
-            <p className="muted center">{filtered.length} result{filtered.length !== 1 ? "s" : ""}</p>
+            <p className="muted center">
+              Showing {displayedProducts.length} of {filtered.length} result{filtered.length !== 1 ? "s" : ""}
+            </p>
             <div className="products-center">
-              {filtered.map(prod => {
+              {displayedProducts.map(prod => {
                 const isInCart = inCartIds.has(prod.id);
                 const isOut = (prod.stock ?? 0) <= 0;
                 return (
                   <article key={prod.id} className="product">
                     <div className="img-container">
-                      {safeUrl(prod.image)
-                        ? <img src={safeUrl(prod.image)} alt={prod.title} className="product-img" />
-                        : <div className="product-img" />}
+                      <img
+                        src={pickImage(prod) || " "}
+                        alt={prod.title || "product"}
+                        width={280}
+                        height={224}
+                        onError={(e) => { e.currentTarget.src = " "; }}
+                      />
                       <button
                         className="bag-btn"
                         disabled={isOut || isInCart}
@@ -180,6 +208,15 @@ export default function ProductsPage() {
                 );
               })}
             </div>
+
+            {/* Load More Button */}
+            {hasMoreProducts && (
+              <div className="load-more-container">
+                <button className="banner-btn load-more-btn" onClick={loadMore}>
+                  Load More items
+                </button>
+              </div>
+            )}
 
             {!filtered.length && (
               <div className="empty-state">

@@ -8,7 +8,7 @@
   padding: 1.25rem 1.25rem 1.5rem; position: relative;
 }
 .auth-close {
-  position: absolute; top: .4rem; right: .6rem; border: none; background: transparent;
+  position: absolute; top: .001rem; right: .3rem; border: none; background: transparent;
   font-size: 1.6rem; cursor: pointer; color: var(--primaryColor);
 }
 .auth-tabs {
@@ -22,5 +22,8 @@
 .auth-form { display: grid; gap: .6rem; }
 .auth-form input {
   border: 1px solid #ddd; padding: .6rem .8rem; font-size: 1rem;
+}
+.auth-form .banner-btn {
+  justify-self: center; width: fit-content;
 }
 .error-msg { color: #c03535; margin-top: .4rem; }
