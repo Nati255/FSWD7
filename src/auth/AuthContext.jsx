@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
-
+import axios from "axios";
 const AuthCtx = createContext(null);
-const API = import.meta.env?.VITE_API_BASE || "http://localhost:3001";
+const API = "http://localhost:3001";
 
 function decodeToken(token) {
   try {
@@ -33,44 +33,44 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async ({ email, password }) => {
     try {
-      const res = await fetch(`${API}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const { data } = await axios.post(
+        `${API}/api/auth/login`,
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-      if (!res.ok) {
-        // מנסים להוציא הודעה שימושית מהשרת; אם אין – נשתמש בסטטוס
-        let message = `Login failed (${res.status})`;
-        try {
-          const err = await res.json();
-          if (err?.error) message = err.error;
-          else if (err?.message) message = err.message;
-        } catch {}
-        throw new Error(message);
-      }
-
-      const data = await res.json();
       const t = data?.token;
       if (!t) throw new Error("Missing token");
 
       const d = decodeToken(t);
       localStorage.setItem("token", t);
       localStorage.setItem("role", d.role);
-      setToken(t); setRole(d.role); setUserId(d.id);
+      setToken(t);
+      setRole(d.role);
+      setUserId(d.id);
+
       return d.role;
-    } catch (e) {
-      throw new Error(e?.message || "Login failed");
+    } catch (err) {
+      const message =
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        err.message ||
+        "Login failed";
+      throw new Error(message);
     }
   }, []);
 
   const register = useCallback(async ({ full_name, username, email, password }) => {
-    const res = await fetch(`${API}/api/auth/register`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ full_name, username, email, password, role: "customer" })
-    });
-    if (!res.ok) throw new Error("Registration failed");
-    return true;
+    try {
+      await axios.post(
+        `${API}/api/auth/register`,
+        { full_name, username, email, password, role: "customer" },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return true;
+    } catch (err) {
+      throw new Error(err.response?.data?.error || err.message || "Registration failed");
+    }
   }, []);
 
   const logout = useCallback(() => {

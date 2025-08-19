@@ -3,9 +3,10 @@ import { useAuth } from "../../auth/AuthContext";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { normalizeImageUrl } from "../../utils/imageUrl";
+import axios from "axios";
 import '../../styles/checkout.css';
 
-const API = import.meta.env?.VITE_API_BASE || "http://localhost:3001";
+const API = "http://localhost:3001";
 const toImgSrc = (u) => {
   if (!u) return "";
   const s = String(u).trim();
@@ -54,7 +55,7 @@ export default function CheckoutPage() {
       return;
     }
     setErr("");
-    setStep((s) => Math.min(s + 1, 3)); // שימוש בפונקציה למנוע “סטייל” ישן
+    setStep((s) => Math.min(s + 1, 3)); 
   };
 
 
@@ -68,27 +69,27 @@ export default function CheckoutPage() {
     if (!isAuth) { openAuth(); return; }
     if (!items.length) { setErr("Your cart is empty."); return; }
     setLoading(true); setErr("");
-    
+
     try {
-      const res = await fetch(`${API}/api/orders/${userId}`, { 
-        method: "POST", 
-        headers,
-        body: JSON.stringify({
+      await axios.post(
+        `${API}/api/orders/${userId}`,
+        {
           shipping_info: form,
           items: items,
           total: total
-        })
-      });
-      
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data?.error || `Order failed (${res.status})`);
-      }
-      
+        },
+        { headers }
+      );
+
       await reload();
       nav("/orders", { replace: true });
     } catch (ex) {
-      setErr(ex.message || "Failed to place order.");
+      const message =
+        ex.response?.data?.error ||
+        ex.response?.data?.message ||
+        ex.message ||
+        "Failed to place order.";
+      setErr(message);
     } finally {
       setLoading(false);
     }

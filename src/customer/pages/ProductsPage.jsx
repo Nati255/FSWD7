@@ -8,8 +8,9 @@ import { useAuth } from "../../auth/AuthContext";
 import { normalizeImageUrl } from "../../utils/imageUrl";
 import { useSearchParams } from "react-router-dom";
 import "../../styles/HomeShop.css";
+import axios from "axios";
 
-const API = import.meta.env?.VITE_API_BASE || "http://localhost:3001";
+const API =  "http://localhost:3001";
 const toImgSrc = (u) => {
   if (!u) return "";
   const s = String(u).trim();
@@ -35,19 +36,26 @@ export default function ProductsPage() {
   const max  = params.get("max")  ?? "";
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`${API}/api/products`)
-      .then(r => (r.ok ? r.json() : Promise.reject(`Failed (${r.status})`)))
-      .then(rows => rows.map(p => ({
-        id: String(p.id),
-        title: p.title,
-        price: Number(p.price),
-        stock: Number(p.stock ?? 0),
-        image: normalizeImageUrl(p.image_url)
-      })))
-      .then(setProducts)
-      .catch(e => setErr(String(e)))
-      .finally(() => setLoading(false));
+    const load = async () => {
+      setLoading(true);
+      setErr("");
+      try {
+        const { data: rows } = await axios.get(`${API}/api/products`);
+        const mapped = rows.map(p => ({
+          id: String(p.id),
+          title: p.title,
+          price: Number(p.price),
+          stock: Number(p.stock ?? 0),
+          image: normalizeImageUrl(p.image_url)
+        }));
+        setProducts(mapped);
+      } catch (e) {
+        setErr(e.response?.data?.error || e.message || "Failed to load products");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
   }, []);
 
   // Reset display count when filters change

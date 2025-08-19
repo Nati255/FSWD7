@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import AdminSidebar from '../../admin/components/AdminSidebar';
 import '../../styles/adminOrders.css'; 
+import axios from 'axios';
 
 const STATUS_OPTIONS = ['pending', 'paid', 'shipped', 'cancelled'];
 
@@ -15,15 +16,23 @@ export default function AdminOrders() {
 
   const fetchOrders = async () => {
     setLoading(true);
-    const qs = new URLSearchParams();
-    if (q) qs.set('q', q);
-    if (status) qs.set('status', status);
-    const res = await fetch(`http://localhost:3001/api/orders?${qs.toString()}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    const data = await res.json();
-    setOrders(Array.isArray(data) ? data : []);
-    setLoading(false);
+    try {
+      const qs = new URLSearchParams();
+      if (q) qs.set('q', q);
+      if (status) qs.set('status', status);
+
+      const { data } = await axios.get(
+        `http://localhost:3001/api/orders?${qs.toString()}`,
+        { headers: token ? { Authorization: `Bearer ${token}` } : undefined }
+      );
+
+      setOrders(Array.isArray(data) ? data : []);
+    } catch (err) {
+      alert(err.response?.data?.error || err.message || 'Failed to fetch orders');
+      setOrders([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { fetchOrders(); }, []);
@@ -31,26 +40,32 @@ export default function AdminOrders() {
   const filteredCount = useMemo(() => orders.length, [orders]);
 
   const handleChangeStatus = async (orderId, nextStatus) => {
-    const res = await fetch(`http://localhost:3001/api/orders/${orderId}/status`, {
-      method: 'PATCH',
-      headers: { 
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ status: nextStatus })
-    });
-    if (!res.ok) return alert('Failed to update status');
-    const updated = await res.json();
-    setOrders(prev => prev.map(o => (o.id === orderId ? { ...o, ...updated } : o)));
+    try {
+      const { data: updated } = await axios.patch(
+        `http://localhost:3001/api/orders/${orderId}/status`,
+        { status: nextStatus },
+        {
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          }
+        }
+      );
+      setOrders(prev => prev.map(o => (o.id === orderId ? { ...o, ...updated } : o)));
+    } catch (err) {
+      alert(err.response?.data?.error || err.message || 'Failed to update status');
+    }
   };
 
   const openDetails = async (orderId) => {
-    const res = await fetch(`http://localhost:3001/api/orders/${orderId}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) return;
-    const data = await res.json();
-    setSelected(data);
+    try {
+      const { data } = await axios.get(
+        `http://localhost:3001/api/orders/${orderId}`,
+        { headers: token ? { Authorization: `Bearer ${token}` } : undefined }
+      );
+      setSelected(data);
+    } catch (err) {
+      alert(err.response?.data?.error || err.message || 'Failed to load order details');
+    }
   };
 
   return (

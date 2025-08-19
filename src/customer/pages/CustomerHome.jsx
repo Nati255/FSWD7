@@ -6,8 +6,11 @@ import AuthModal from "../../auth/AuthModal";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../../auth/AuthContext";
 import { normalizeImageUrl } from "../../utils/imageUrl";
+import axios from "axios";
 
 import "../../styles/HomeShop.css";
+
+
 const toImgSrc = (u) => {
   if (!u) return "";
   const s = String(u).trim();
@@ -51,17 +54,23 @@ function ProductsSection() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/products")
-      .then(r => r.json())
-      .then(rows => rows.map(p => ({
-        id: String(p.id),
-        title: p.title,
-        price: Number(p.price),
-        image: normalizeImageUrl(p.image_url),
-        stock: Number(p.stock ?? 0),
-        category: p.category ?? p.category_name ?? p.cat ?? null,
-      })))
-      .then(setProducts);
+    const loadProducts = async () => {
+      try {
+        const { data: rows } = await axios.get("http://localhost:3001/api/products");
+        const mapped = rows.map((p) => ({
+          id: String(p.id),
+          title: p.title,
+          price: Number(p.price),
+          image: normalizeImageUrl(p.image_url),
+          stock: Number(p.stock ?? 0),
+          category: p.category ?? p.category_name ?? p.cat ?? null,
+        }));
+        setProducts(mapped);
+      } catch (err) {
+        console.error("Failed to load products:", err);
+      }
+    };
+    loadProducts();
   }, []);
 
   const inCartIds = useMemo(() => new Set(cartItems.map(i => String(i.id))), [cartItems]);

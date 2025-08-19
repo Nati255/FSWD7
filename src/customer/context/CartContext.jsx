@@ -1,7 +1,10 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../auth/AuthContext";
+import axios from "axios";
+
+
 const CartCtx = createContext(null);
-const API = import.meta.env?.VITE_API_BASE || "http://localhost:3001";
+const API = "http://localhost:3001";
 
 function getUserIdFromToken() {
   const token = localStorage.getItem("token");
@@ -16,7 +19,6 @@ function getUserIdFromToken() {
 
 export function CartProvider({ children }) {
   const { token, userId } = useAuth();
-  // אל תשלח Authorization: undefined
   const headers = useMemo(() => {
     const h = { "Content-Type": "application/json" };
     if (token) h.Authorization = `Bearer ${token}`;
@@ -31,49 +33,60 @@ export function CartProvider({ children }) {
       setCart({ items: [], total: 0 });
       return;
     }
-    const res = await fetch(`http://localhost:3001/api/cart/${userId}`, { headers }); 
-    if (!res.ok) throw new Error(`Failed to load cart (${res.status})`);
-    const data = await res.json(); // { items, total }
-    setCart(data);
+    try {
+      const { data } = await axios.get(`http://localhost:3001/api/cart/${userId}`, { headers });
+      // { items, total }
+      setCart(data);
+    } catch (err) {
+      throw new Error(err.response?.data?.error || err.message || "Failed to load cart");
+    }
   }, [userId, headers]);
 
   useEffect(() => { load(); }, [load]);
 
   const add = async (productId, amount = 1) => {
-    const res = await fetch(`http://localhost:3001/api/cart`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ productId, amount })
-    });
-    if (!res.ok) throw new Error(`Add failed (${res.status})`);
-    const data = await res.json();
-    setCart(data);
-    setDrawerOpen(true);
+    try {
+      const { data } = await axios.post(
+        `http://localhost:3001/api/cart`,
+        { productId, amount },
+        { headers }
+      );
+      setCart(data);
+      setDrawerOpen(true);
+    } catch (err) {
+      throw new Error(err.response?.data?.error || err.message || "Add failed");
+    }
   };
 
   const setAmount = async (productId, amount) => {
-    const res = await fetch(`${API}/api/cart`, {
-      method: "PUT",
-      headers,
-      body: JSON.stringify({ userId, productId, amount })
-    });
-    if (!res.ok) throw new Error(`Update failed (${res.status})`);
-    const data = await res.json();
-    setCart(data);
+    try {
+      const { data } = await axios.put(
+        `${API}/api/cart`,
+        { userId, productId, amount },
+        { headers }
+      );
+      setCart(data);
+    } catch (err) {
+      throw new Error(err.response?.data?.error || err.message || "Update failed");
+    }
   };
 
   const remove = async (productId) => {
-    const res = await fetch(`${API}/api/cart/${userId}/${productId}`, { method: "DELETE", headers });
-    if (!res.ok) throw new Error(`Remove failed (${res.status})`);
-    const data = await res.json();
-    setCart(data);
+    try {
+      const { data } = await axios.delete(`${API}/api/cart/${userId}/${productId}`, { headers });
+      setCart(data);
+    } catch (err) {
+      throw new Error(err.response?.data?.error || err.message || "Remove failed");
+    }
   };
 
   const clear = async () => {
-    const res = await fetch(`${API}/api/cart/${userId}`, { method: "DELETE", headers });
-    if (!res.ok) throw new Error(`Clear failed (${res.status})`);
-    const data = await res.json();
-    setCart(data);
+    try {
+      const { data } = await axios.delete(`${API}/api/cart/${userId}`, { headers });
+      setCart(data);
+    } catch (err) {
+      throw new Error(err.response?.data?.error || err.message || "Clear failed");
+    }
   };
 
   const inc = (productId) => {

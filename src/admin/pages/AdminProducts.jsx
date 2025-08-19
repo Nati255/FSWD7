@@ -36,7 +36,7 @@ export default function AdminProducts() {
       const { data } = await axios.get(API_BASE, { headers: { Accept: 'application/json' } });
       setProducts(Array.isArray(data) ? data : []);
     } catch (e) {
-      sonsole.error(e);
+      console.error(e);
       const msg = (e.response && (e.response.data?.error || e.response.statusText)) || e.message || 'שגיאה בטעינת המוצרים';
       setError(`GET ${API_BASE} failed: ${msg}`);
     } finally {
@@ -150,6 +150,7 @@ export default function AdminProducts() {
 
   const [uploading, setUploading] = useState(false);
   const API_ROOT = "http://localhost:3001";
+
   async function onUploadImage(file) {
   if (!file) return;
   try {
@@ -161,13 +162,12 @@ export default function AdminProducts() {
     const res = await fetch(`${API_ROOT}/api/upload`, {
       method: 'POST',
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-      body: fd, // שים לב: לא מגדירים Content-Type ידנית
+      body: fd, 
     });
 
     if (!res.ok) throw new Error(`Upload failed (${res.status})`);
     const data = await res.json();
 
-    // ממלאים את שדה ה-URL בטופס אוטומטית
     setDraft((d) => ({ ...d, image_url: data.url }));
   } catch (err) {
     alert(err.message || 'Upload failed');
@@ -190,7 +190,7 @@ export default function AdminProducts() {
               <i className="fas fa-search" />
               <input
                 type="text"
-                placeholder="חיפוש לפי שם/קטגוריה/תיאור…"
+                placeholder="Search by name/category/description…"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />

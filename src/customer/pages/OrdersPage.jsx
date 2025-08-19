@@ -6,8 +6,9 @@ import Footer from "../components/Footer";
 import CartDrawer from "../components/CartDrawer";
 import { normalizeImageUrl } from "../../utils/imageUrl";
 import "../../styles/Order.css";
+import axios from "axios";
 
-const API = import.meta.env?.VITE_API_BASE || "http://localhost:3001";
+const API = "http://localhost:3001";
 const fmtDate = (s) => { try { return new Date(s).toLocaleString(); } catch { return s; } };
 
 export default function OrdersPage() {
@@ -20,12 +21,13 @@ export default function OrdersPage() {
     if (!userId || !headers) return;
     (async () => {
       try {
-        const res = await fetch(`${API}/api/orders/user/${userId}`, { headers });
-        if (!res.ok) throw new Error(`Failed to load orders (${res.status})`);
-        setOrders(await res.json());
-      } catch (e) { setErr(e.message); }
+        const { data } = await axios.get(`${API}/api/orders/user/${userId}`, { headers });
+        setOrders(Array.isArray(data) ? data : []);
+      } catch (e) {
+        setErr(e.response?.data?.error || e.message || "Failed to load orders");
+      }
     })();
-  }, [ userId, headers]);
+  }, [userId, headers]);
 
   return (
     <>
@@ -60,7 +62,6 @@ function OrderCard({ order, headers }) {
   const [open, setOpen] = useState(false);
   const [details, setDetails] = useState(null);
 
-  const API = import.meta.env?.VITE_API_BASE || "http://localhost:3001";
 
   const toImgSrc = (u) => {
     if (!u) return "";
@@ -74,13 +75,12 @@ function OrderCard({ order, headers }) {
 
   const toggle = async () => {
     if (!open && !details) {
-      const res = await fetch(`${API}/api/orders/${order.id}`, { headers });
-      if (!res.ok) {
-         setDetails({ items: [] });
-        }
-      else{
-        const data = await res.json();
+      try {
+        const { data } = await axios.get(`${API}/api/orders/${order.id}`, { headers });
         setDetails(data);
+      } catch (e) {
+        // נשמור על אותו UX: אם נכשל, נציג כרטיסה ריקה
+        setDetails({ items: [] });
       }
     }
     setOpen(!open);

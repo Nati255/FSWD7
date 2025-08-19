@@ -1,6 +1,8 @@
 import AdminSidebar from '../components/AdminSidebar';
 import '../../styles/adminDashboard.css'; 
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
 const currency = (n) =>
   new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(n || 0));
 
@@ -11,12 +13,17 @@ export default function AdminDashboard() {
 
   const fetchStats = async () => {
     setLoading(true);
-    const res = await fetch('http://localhost:3001/api/admin/stats', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    const data = await res.json();
-    setStats(data || { active_orders: 0, total_revenue: 0, top_products: [] });
-    setLoading(false);
+    try {
+      const { data } = await axios.get('http://localhost:3001/api/admin/stats', {
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined
+      });
+      setStats(data || { active_orders: 0, total_revenue: 0, top_products: [] });
+    } catch (err) {
+      alert(err.response?.data?.error || err.message || 'Failed to fetch stats');
+      setStats({ active_orders: 0, total_revenue: 0, top_products: [] });
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { fetchStats();  }, []);
