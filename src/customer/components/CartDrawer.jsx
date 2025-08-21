@@ -7,6 +7,7 @@ import "../../styles/HomeShop.css";
 const CloseIcon = () => <i className="fas fa-window-close" />;
 const UpIcon = () => <i className="fas fa-chevron-up" />;
 const DownIcon = () => <i className="fas fa-chevron-down" />;
+
 const toImgSrc = (u) => {
   if (!u) return "";
   const s = String(u).trim();
@@ -15,6 +16,7 @@ const toImgSrc = (u) => {
 };
 const pickImage = (it) =>
   toImgSrc(it.image_url || it.image || it.img || it.thumbnail || it.thumb);
+
 export default function CartDrawer() {
   const { drawerOpen, close, items, total, inc, dec, remove, clear } = useCart();
   const { isAuth, openAuth } = useAuth();

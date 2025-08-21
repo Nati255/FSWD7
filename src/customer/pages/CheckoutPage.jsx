@@ -21,7 +21,7 @@ export default function CheckoutPage() {
   const { items, total, reload } = useCart();
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
-  const [step, setStep] = useState(1); // Multi-step checkout
+  const [step, setStep] = useState(1);
   const nav = useNavigate();
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function CheckoutPage() {
       );
 
       await reload();
-      nav("/orders", { replace: true });
+      nav("/home/customer/orders", { replace: true });
     } catch (ex) {
       const message =
         ex.response?.data?.error ||

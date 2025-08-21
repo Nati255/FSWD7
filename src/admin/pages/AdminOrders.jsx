@@ -1,10 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import AdminSidebar from '../../admin/components/AdminSidebar';
+import { normalizeImageUrl } from "../../utils/imageUrl";
 import '../../styles/adminOrders.css'; 
 import axios from 'axios';
 
 const STATUS_OPTIONS = ['pending', 'paid', 'shipped', 'cancelled'];
+
+const toImgSrc = (u) => {
+  if (!u) return "";
+  const s = String(u).trim();
+  if (!s || s.startsWith("/api/")) return "";
+  return normalizeImageUrl(s);
+};
+const pickImage = (it) =>
+  toImgSrc(it.image_url || it.image || it.img || it.thumbnail || it.thumb);
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
@@ -185,7 +195,7 @@ export default function AdminOrders() {
               <div className="items-list">
                 {selected.items?.map((it, idx) => (
                   <div key={idx} className="item-row">
-                    <img src={it.image_url} alt={it.title} />
+                    <img src={pickImage(it)} alt={it.title} />
                     <div className="item-info">
                       <div className="it-title">{it.title}</div>
                       <div className="it-sub">Qty: {it.amount} · ${Number(it.price_at_order).toFixed(2)}</div>

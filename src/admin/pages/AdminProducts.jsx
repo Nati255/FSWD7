@@ -37,7 +37,7 @@ export default function AdminProducts() {
       setProducts(Array.isArray(data) ? data : []);
     } catch (e) {
       console.error(e);
-      const msg = (e.response && (e.response.data?.error || e.response.statusText)) || e.message || 'שגיאה בטעינת המוצרים';
+      const msg = (e.response && (e.response.data?.error || e.response.statusText)) || e.message ;
       setError(`GET ${API_BASE} failed: ${msg}`);
     } finally {
       setLoading(false);
@@ -92,7 +92,7 @@ export default function AdminProducts() {
         category: draft.category?.trim() || ''
       };
       if (!body.title || !body.price || body.stock == null || Number.isNaN(body.price) || Number.isNaN(body.stock)) {
-        throw new Error('שדות חובה: title, price, stock');
+        throw new Error('Required fields: title, price, stock');
       }
 
       if (modal.mode === 'create') {
@@ -111,13 +111,13 @@ export default function AdminProducts() {
         navigate('/login', { replace: true });
         return;
       }
-      alert(e.response?.data?.error || e.message || 'שגיאה בשמירה');
+      alert(e.response?.data?.error || e.message );
     } finally {
       setSaving(false);
     }
   };
   const deleteProduct = async (id) => {
-    if (!window.confirm(`למחוק מוצר ${id}?`)) return;
+    if (!window.confirm(`Delete Product ${id}?`)) return;
     try {
       await axios.delete(`${API_BASE}/${id}`, { headers: authHeaders });
       setProducts(prev => prev.filter(p => p.id !== id));
@@ -128,14 +128,14 @@ export default function AdminProducts() {
         navigate('/login', { replace: true });
         return;
       }
-      alert(e.response?.data?.error || e.message || 'שגיאה במחיקה');
+      alert(e.response?.data?.error || e.message );
     }
   };
 
   function toImgSrc(u) {
   if (!u) return "";
   const s = String(u).trim();
-  if (!s || s.startsWith("/api/")) return "";     // לא מנסים לטעון API בתור תמונה
+  if (!s || s.startsWith("/api/")) return "";    
   return normalizeImageUrl(s);
 }
 

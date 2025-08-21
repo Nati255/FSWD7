@@ -22,6 +22,7 @@ export default function AdminDashboard() {
       alert(err.response?.data?.error || err.message || 'Failed to fetch stats');
       setStats({ active_orders: 0, total_revenue: 0, top_products: [] });
     } finally {
+      await new Promise(resolve => setTimeout(resolve, 2000));
       setLoading(false);
     }
   };
